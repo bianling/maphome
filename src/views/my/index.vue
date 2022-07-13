@@ -1,0 +1,152 @@
+<template>
+  <div class="my">
+    <!-- 头部部分  未登录-->
+    <div class="myheader" v-if="!$store.state.token">
+      <!-- 背景图 -->
+      <div class="headerimg">
+        <img src="@/assets/img/bg.png" alt="" />
+      </div>
+      <!-- 头像 -->
+      <div class="imgbg">
+        <img src="@/assets/img/avatar.png" alt="" />
+      </div>
+      <div class="maskheader">
+        <div class="header-username">游客</div>
+        <van-button type="primary" class="van_btn" @click="goLogin"
+          >去登陆</van-button
+        >
+      </div>
+    </div>
+    <!-- 头部部分  未登录-->
+    <!-- 头部部分  已登录-->
+    <div class="myheader" id="myheader" v-else>
+      <!-- 背景图 -->
+      <div class="headerimg">
+        <img src="@/assets/img/avatar (1).png" alt="" />
+      </div>
+      <!-- 头像 -->
+      <div class="imgbg">
+        <img src="@/assets/img/avatar.png" alt="" />
+      </div>
+      <div class="maskheader">
+        <div class="header-username">用户id</div>
+        <van-button type="primary" class="van_btn" @click="noLogin"
+          >退出</van-button
+        >
+        <div class="loginmy">编辑个人资料<van-icon name="arrow" /></div>
+      </div>
+    </div>
+    <!-- 头部部分  已登录-->
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'My',
+  data() {
+    return {}
+  },
+  methods: {
+    // 跳转登录页面
+    goLogin() {
+      this.$toast.loading('加载中')
+      this.$router.push({
+        path: '/login'
+      })
+      this.$toast.success('加载成功')
+    },
+    // 退出登录
+    noLogin() {
+      this.$dialog
+        .confirm({
+          title: '提示',
+          message: '是否确定退出'
+        })
+        .then(() => {
+          this.$toast.loading('退出中')
+          this.$store.commit('addToken', null)
+          this.$toast.success('退出成功')
+        })
+    }
+  }
+}
+</script>
+
+<style lang="less" scoped>
+.my {
+  padding-bottom: 50px;
+}
+.myheader {
+  position: relative;
+  height: 300px;
+  width: 375px;
+  .headerimg {
+    img {
+      width: 100%;
+    }
+  }
+  .maskheader {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: 320px;
+    height: 165px;
+    background-color: #fff;
+    text-align: center;
+    box-shadow: 1px 1px 5px 3px #ebebeb;
+    .header-username {
+      margin-top: 54px;
+      font-size: 14px;
+    }
+    .van_btn {
+      width: 70px;
+      height: 30px;
+      font-size: 12px;
+      background-color: #21b97a;
+      border-radius: 5px;
+      margin-top: 20px;
+    }
+  }
+  .imgbg {
+    position: absolute;
+    bottom: 130px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    width: 70px;
+    height: 70px;
+    padding: 5px;
+    background-color: #f6f6f6;
+    border-radius: 50%;
+    text-align: center;
+    box-shadow: 0px 1px 1px 1px #c7c7c7;
+    img {
+      width: 60px;
+      height: 60px;
+    }
+  }
+}
+#myheader {
+  height: 375px;
+  .maskheader {
+    height: 208px;
+  }
+  .imgbg {
+    position: absolute;
+    bottom: 175px;
+  }
+  .van_btn {
+    width: 56px;
+    height: 20px;
+    font-size: 12px;
+    border-radius: 10px;
+    margin-top: 0;
+  }
+  .loginmy {
+    font-size: 12px;
+    color: #999;
+    margin-top: 20px;
+  }
+}
+</style>

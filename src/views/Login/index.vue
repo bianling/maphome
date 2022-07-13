@@ -66,6 +66,11 @@ export default {
 
       try {
         // 登陆成功
+        this.$toast.loading({
+          message: '登陆中',
+          duration: 0
+        })
+
         const { data } = await login(this.username, this.password)
         this.$store.commit('addToken', data.body.token)
         this.$toast.success(data.description)
@@ -73,6 +78,7 @@ export default {
         this.$router.push({
           path: '/'
         })
+        this.$toast.success('登录成功')
       } catch (e) {
         // 登陆失败
         this.$toast.fail('账号或密码错误')
@@ -89,37 +95,37 @@ export default {
   background-color: #21b97a;
   /deep/.van-icon {
     color: #fff;
-    font-size: 30px;
+    font-size: 15px;
   }
   /deep/.van-nav-bar__title {
     color: #fff;
-    font-size: 35px;
+    font-size: 17.5px;
   }
   /deep/.van-cell__value {
-    font-size: 35px;
+    font-size: 17.5px;
   }
 }
 .fromVant {
-  margin-top: 40px;
+  margin-top: 20px;
   .loginbtn {
     background-color: #21b97a;
     border: none;
-    height: 100px;
-    margin-top: 60px;
+    height: 50px;
+    margin-top: 30px;
     .van-button__text {
-      font-size: 36px;
+      font-size: 18px;
     }
   }
   /deep/.van-field__control {
-    margin-top: 40px;
-    font-size: 34px;
+    margin-top: 20px;
+    font-size: 17px;
     background-color: #fff;
   }
 }
 .register {
-  font-size: 27px;
+  font-size: 13.5px;
   text-align: center;
   color: #666666;
-  margin-top: 60px;
+  margin-top: 30px;
 }
 </style>

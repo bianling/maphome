@@ -12,7 +12,7 @@ export default new Vuex.Store({
   mutations: {
     addToken(state, val) {
       state.token = val
-      localStorage.setItem('hometoken', JSON.stringify(val))
+      localStorage.setItem('hometoken', JSON.stringify(val) || null)
     }
   },
   actions: {
