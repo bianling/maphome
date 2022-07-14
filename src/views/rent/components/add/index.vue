@@ -87,7 +87,7 @@
       <div class="information">房屋图像</div>
       <!-- fileList用于绑定图片个数,固定写法 -->
       <!-- 图片上传 -->
-      <van-uploader v-model="fileList" multiple />
+      <van-uploader v-model="data.houseImg" multiple />
       <!-- 图片上传 -->
       <div class="information">房屋配置</div>
       <!-- 房屋配置列表 -->
@@ -135,19 +135,17 @@ export default {
     return {
       // 发布房源的内容
       data: {
-        title: '',
-        description: '',
-        houseImg: '',
-        oriented: '',
-        supporting: [],
-        price: '',
-        roomType: '',
-        size: '',
-        floor: '',
-        community: ''
+        title: '',    //房屋标题
+        description: '',  //房屋描述
+        houseImg: [],   //图片
+        oriented: '',   //朝向
+        supporting: [], //配置
+        price: '',    //租金
+        roomType: '',  //户型
+        size: '', //面积
+        floor: '',  //楼层
+        community: ''  // 小区名称
       },
-      value: '',
-      fileList: [],
       // 房屋配置数据列表
       furniture: [
         {
