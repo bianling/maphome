@@ -5,7 +5,13 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    token: JSON.parse(localStorage.getItem('hometoken')) || null
+    token: JSON.parse(localStorage.getItem('hometoken')) || null,
+    currentCityL: {
+      label: "北京",
+      pinyin: "beijing",
+      short: "bj",
+      value: "AREA|88cff55c-aaa4-e2e0"
+    }
   },
   getters: {
   },

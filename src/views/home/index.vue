@@ -8,8 +8,7 @@
         class="home-search-list"
         background="#f7f8fa"
       >
-        <span slot="label" class="search-text"
-          >地址
+        <span slot="label" class="search-text" @click="goCity">{{$store.state.currentCityL.label}}
           <i class="iconfont icon-xiangxia"></i>
         </span>
       </van-search>
@@ -121,6 +120,12 @@ export default {
     goAdd() {
       this.$router.push({
         path: '/rent/add'
+      })
+    },
+    //点击跳转城市列表
+    goCity(){
+      this.$router.push({
+        path:'/city'
       })
     }
   }

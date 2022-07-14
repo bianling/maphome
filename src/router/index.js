@@ -63,9 +63,12 @@ const routes = [
         component: () => import('@/views/rent/components/search')
       }
     ]
+  },
+  // 城市列表
+  {
+    path: '/city',
+    component: () => import('@/views/city')
   }
-  // 我的出租
-
 ]
 
 const router = new VueRouter({

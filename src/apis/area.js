@@ -11,3 +11,22 @@ export const getCommunity = (name) => {
         }
     })
 }
+
+//获取城市列表数据 /area/city
+export const getCity = () => {
+    return request({
+        method: 'GET',
+        url: '/area/city',
+        params: {
+            level: 1
+        }
+    })
+}
+
+//获取热门城市列表
+export const hotCity = () => {
+    return request({
+        method: 'GET',
+        url: '/area/hot',
+    })
+}
