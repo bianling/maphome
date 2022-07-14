@@ -9,7 +9,7 @@ request.interceptors.request.use(function (config) {
   const { token } = store.state
   // 请求发起会经过这里
   if (token) {
-    config.headers.Authorization = `Bearer ${token}`
+    config.headers.Authorization = `${token}`
   }
   return config
 },

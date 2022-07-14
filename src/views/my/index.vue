@@ -26,10 +26,10 @@
       </div>
       <!-- 头像 -->
       <div class="imgbg">
-        <img src="@/assets/img/avatar.png" alt="" />
+        <img :src="userImg" alt="" />
       </div>
       <div class="maskheader">
-        <div class="header-username">用户id</div>
+        <div class="header-username">{{ userInfo.nickname }}</div>
         <van-button type="primary" class="van_btn" @click="noLogin"
           >退出</van-button
         >
@@ -37,14 +37,48 @@
       </div>
     </div>
     <!-- 头部部分  已登录-->
+    <!-- list列表 -->
+    <van-grid
+      :column-num="3"
+      class="my-list"
+      :border="false"
+      :clickable="true"
+      icon-size="20px"
+    >
+      <van-grid-item
+        icon="star-o"
+        text="我的收藏"
+        class="my-list-item"
+        to="/favorate"
+      />
+      <van-grid-item
+        icon="wap-home-o"
+        text="我的出租"
+        class="my-list-item"
+        to="/rent"
+      />
+      <van-grid-item icon="newspaper-o" text="看房记录" class="my-list-item" />
+      <van-grid-item icon="coupon-o" text="成为房主" class="my-list-item" />
+      <van-grid-item icon="contact" text="个人资料" class="my-list-item" />
+      <van-grid-item icon="service-o" text="联系我们" class="my-list-item" />
+    </van-grid>
+    <!-- list列表 -->
+    <!-- 下方图片 -->
+    <div class="data-img">
+      <img src="@/assets/img/join.png" />
+    </div>
+    <!-- 下方图片 -->
   </div>
 </template>
 
 <script>
+import { userInfo, logout } from '@/apis/user'
 export default {
   name: 'My',
   data() {
-    return {}
+    return {
+      userInfo: {}
+    }
   },
   methods: {
     // 跳转登录页面
@@ -62,11 +96,29 @@ export default {
           title: '提示',
           message: '是否确定退出'
         })
-        .then(() => {
-          this.$toast.loading('退出中')
-          this.$store.commit('addToken', null)
-          this.$toast.success('退出成功')
+        .then(async () => {
+          try {
+            const { data } = await logout()
+            this.$toast.loading('退出中')
+            this.$store.commit('addToken', null)
+            this.$toast.success(data.description)
+          } catch (error) {
+            this.$toast.fail('登出失败')
+          }
         })
+    }
+  },
+  async created() {
+    try {
+      const { data } = await userInfo()
+      this.userInfo = data.body
+    } catch (e) {
+      this.$toast.fail(e.message)
+    }
+  },
+  computed: {
+    userImg() {
+      return `http://liufusong.top:8080${this.userInfo.avatar}`
     }
   }
 }
@@ -94,7 +146,7 @@ export default {
     height: 165px;
     background-color: #fff;
     text-align: center;
-    box-shadow: 1px 1px 5px 3px #ebebeb;
+    box-shadow: 1px 3px 5px 3px #ebebeb;
     .header-username {
       margin-top: 54px;
       font-size: 14px;
@@ -141,12 +193,29 @@ export default {
     height: 20px;
     font-size: 12px;
     border-radius: 10px;
-    margin-top: 0;
+    margin-top: 5px;
   }
   .loginmy {
     font-size: 12px;
     color: #999;
     margin-top: 20px;
+  }
+}
+.my-list {
+  .van-grid-item__text {
+    font-size: 13px;
+  }
+  .my-list-item {
+    margin-top: 18px;
+  }
+}
+.data-img {
+  width: 345px;
+  height: 85px;
+  margin-left: 15px;
+  margin-top: 10px;
+  img {
+    width: 100%;
   }
 }
 </style>
