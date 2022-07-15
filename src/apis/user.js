@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import store from '@/store/index'
 
 /**
  * 登录
@@ -49,5 +50,16 @@ export const housesList = () => {
     return request({
         method: 'GET',
         url: '/user/houses'
+    })
+}
+
+//发布房源 /user/houses
+export const addHouses = (data) => {
+    data.community = store.state.community.community
+    console.log(data);
+    return request({
+        method: 'POST',
+        url: '/user/houses',
+        body: data
     })
 }

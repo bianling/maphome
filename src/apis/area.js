@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import store from '@/store/index'
 
 //获取小区名
 export const getCommunity = (name) => {
@@ -7,7 +8,7 @@ export const getCommunity = (name) => {
         url: '/area/community',
         params: {
             name,
-            id: 1
+            id: store.state.currentCityL.value
         }
     })
 }

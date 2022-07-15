@@ -1,14 +1,14 @@
 <template>
   <div class="addIndex">
     <navBar :title="'发布房源'" />
-    <van-form @submit="addRent" class="form">
+    <van-form class="form">
       <div class="information informationtop">房源信息</div>
       <van-cell-group>
         <!-- 小区名称 -->
         <van-cell
           title="小区名称"
           is-link
-          value="请输入小区名称"
+          :value="community.communityName || '请输入小区名称' "
           to="/rent/search"
         />
         <!-- 小区名称 -->
@@ -30,7 +30,7 @@
         <!-- 户型 -->
         <van-cell
           is-link
-          :value="data.roomType || '请选择'"
+          :value="actionsText || '请选择'"
           @click="show = true"
         >
           <span slot="title">户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;型</span>
@@ -47,22 +47,23 @@
         <van-cell
           title="所在楼层"
           is-link
-          :value="data.floor || '请选择'"
+          :value="floorText || '请选择'"
           @click="showFloor = true"
         />
         <!-- 楼层弹出层 -->
         <van-action-sheet
           v-model="showFloor"
-          :actions="actionsFloor"
+          :actions="floor"
           @select="onSelectFloor"
           cancel-text="取消"
+          :lazy-render="true"
         />
       </van-cell-group>
       <!-- 所在楼层 -->
       <!-- 朝向 -->
       <van-cell
         is-link
-        :value="data.oriented || '请选择'"
+        :value="orientedText || '请选择'"
         :border="false"
         @click="showOriented = true"
       >
@@ -87,7 +88,7 @@
       <div class="information">房屋图像</div>
       <!-- fileList用于绑定图片个数,固定写法 -->
       <!-- 图片上传 -->
-      <van-uploader v-model="data.houseImg" multiple />
+      <van-uploader v-model="imgs" multiple :after-read="afterRead"/>
       <!-- 图片上传 -->
       <div class="information">房屋配置</div>
       <!-- 房屋配置列表 -->
@@ -121,160 +122,179 @@
         <van-button plain type="primary" class="gobtn-btn" @click="noAdd"
           >取消</van-button
         >
-        <van-button type="primary" class="gobtn-btn">提交</van-button>
+        <van-button type="primary" class="gobtn-btn" @click="addRent"
+          >提交</van-button
+        >
       </div>
     </van-form>
   </div>
 </template>
 
 <script>
-import navBar from '@/components/navBar.vue'
+import navBar from "@/components/navBar.vue";
+import { addHouses } from "@/apis/user";
+import { mapState } from "vuex";
+import { getHouses } from "@/apis/house";
+import {plugin} from "@/apis/plugin"
 export default {
-  name: 'Add',
+  name: "Add",
   data() {
     return {
       // 发布房源的内容
       data: {
-        title: '',    //房屋标题
-        description: '',  //房屋描述
-        houseImg: [],   //图片
-        oriented: '',   //朝向
+        title: "", //房屋标题
+        description: "", //房屋描述
+        houseImg: '', //图片
+        oriented: "", //朝向
         supporting: [], //配置
-        price: '',    //租金
-        roomType: '',  //户型
-        size: '', //面积
-        floor: '',  //楼层
-        community: ''  // 小区名称
+        price: "", //租金
+        roomType: "", //户型
+        size: "", //面积
+        floor: "", //楼层
+        community: "", // 小区名称
       },
       // 房屋配置数据列表
       furniture: [
         {
-          iconList: 'icon-shimuyigui',
-          furnitureList: '衣柜',
+          iconList: "icon-shimuyigui",
+          furnitureList: "衣柜",
           id: 1,
-          isActive: false
+          isActive: false,
         },
         {
-          iconList: 'icon-xiyiji',
-          furnitureList: '洗衣机',
+          iconList: "icon-xiyiji",
+          furnitureList: "洗衣机",
           id: 2,
-          isActive: false
+          isActive: false,
         },
         {
-          iconList: 'icon-kongtiao',
-          furnitureList: '空调',
+          iconList: "icon-kongtiao",
+          furnitureList: "空调",
           id: 3,
-          isActive: false
+          isActive: false,
         },
         {
-          iconList: 'icon-meiqitianranqi',
-          furnitureList: '天然气',
+          iconList: "icon-meiqitianranqi",
+          furnitureList: "天然气",
           id: 4,
-          isActive: false
+          isActive: false,
         },
         {
-          iconList: 'icon-bingxiang',
-          furnitureList: '冰箱',
+          iconList: "icon-bingxiang",
+          furnitureList: "冰箱",
           id: 5,
-          isActive: false
+          isActive: false,
         },
         {
-          iconList: 'icon-nuanqi',
-          furnitureList: '暖气',
+          iconList: "icon-nuanqi",
+          furnitureList: "暖气",
           id: 6,
-          isActive: false
+          isActive: false,
         },
         {
-          iconList: 'icon-dianshiji',
-          furnitureList: '电视',
+          iconList: "icon-dianshiji",
+          furnitureList: "电视",
           id: 7,
-          isActive: false
+          isActive: false,
         },
         {
-          iconList: 'icon-linyu',
-          furnitureList: '热水器',
+          iconList: "icon-linyu",
+          furnitureList: "热水器",
           id: 8,
-          isActive: false
+          isActive: false,
         },
         {
-          iconList: 'icon-wifi',
-          furnitureList: '宽带',
+          iconList: "icon-wifi",
+          furnitureList: "宽带",
           id: 9,
-          isActive: false
+          isActive: false,
         },
         {
-          iconList: 'icon-shafa',
-          furnitureList: '沙发',
+          iconList: "icon-shafa",
+          furnitureList: "沙发",
           id: 10,
-          isActive: false
-        }
+          isActive: false,
+        },
       ],
       // 户型弹出层
       show: false,
-      actions: [
-        { name: '一室' },
-        { name: '二室' },
-        { name: '三室' },
-        { name: '四室' },
-        { name: '四室+' }
-      ],
+      actions: [],
       // 楼层弹出层
       showFloor: false,
-      actionsFloor: [
-        { name: '高楼层' },
-        { name: '中楼层' },
-        { name: '低楼层' }
-      ],
+      floor: [],
       // 朝向
       showOriented: false,
-      actionsOriented: [
-        { name: '东' },
-        { name: '西' },
-        { name: '南' },
-        { name: '北' },
-        { name: '东南' },
-        { name: '东北' },
-        { name: '西南' },
-        { name: '西北' }
-      ]
-    }
+      actionsOriented: [],
+      floorText: "", //楼层文本内容
+      orientedText: "", //朝向文本内容
+      actionsText:"",//户型文本内容
+      imgs:[]
+    };
   },
   components: {
-    navBar
+    navBar,
   },
   methods: {
-    addRent(a) {
-      console.log(a)
+    //发布房源
+    async addRent() {
+      try {
+        this.data.supporting=this.data.supporting.join('|')
+        const res = await addHouses(this.data);
+        console.log(res);
+      } catch (err) {
+        console.log(err);
+      }
     },
     afterRead() {},
     // 退出添加
     noAdd() {
       this.$dialog
         .confirm({
-          title: '提示',
-          message: '放弃发布房源？',
-          confirmButtonText: '放弃',
-          cancelButtonText: '继续编辑',
-          cancelButtonColor: '#108ee9'
+          title: "提示",
+          message: "放弃发布房源？",
+          confirmButtonText: "放弃",
+          cancelButtonText: "继续编辑",
+          cancelButtonColor: "#108ee9",
         })
         .then(() => {
-          this.$router.back()
-        })
+          this.$router.back();
+        });
     },
     // 弹出层
     onSelect(val) {
-      this.data.roomType = val.name
-      this.show = false
+      this.data.roomType = val.value;
+      this.actionsText = val.name;
+      this.show = false;
     },
     // 楼层弹出层
     onSelectFloor(val) {
-      this.data.floor = val.name
-      this.showFloor = false
+      this.data.floor = val.value;
+      this.floorText = val.name;
+      this.showFloor = false;
     },
     // 朝向弹出层
     onSelectOriented(val) {
-      this.data.oriented = val.name
-      this.showOriented = false
+      this.data.oriented = val.value;
+      this.orientedText = val.name;
+      this.showOriented = false;
+    },
+    //遍历
+    foreachData(val, dataName) {
+      val.forEach((item, index) => {
+        (dataName[index] = {}),
+          (dataName[index]["name"] = item.label),
+          (dataName[index]["value"] = item.value);
+      });
+    },
+    async afterRead(file){
+      console.log(file);
+      try {
+       const res=  await  plugin(file)
+       console.log(res);
+      } catch (error) {
+        console.log(error);
+      }
+
     }
   },
   watch: {
@@ -282,17 +302,47 @@ export default {
       deep: true,
       handler() {
         // supporting
-        this.data.supporting = []
+        this.data.supporting = [];
         this.furniture.forEach((item) => {
           if (item.isActive) {
-            this.data.supporting.push(item.furnitureList)
+            this.data.supporting.push(item.furnitureList);
+          }
+        });
+        console.log(this.data.supporting);
+      },
+    },
+    //监听图片列表修改,将图base64加入到数据中
+    imgs:{
+      deep:true,
+      handler(){
+        this.data.houseImg=''
+        this.imgs.forEach(item=>{
+          if(!this.data.houseImg){
+            this.data.houseImg=item.content
+          }else{
+            this.data.houseImg= this.data.houseImg + '|' +item.content
           }
         })
-        console.log(this.data.supporting)
       }
     }
-  }
-}
+  },
+  computed: {
+    ...mapState(["community"]),
+  },
+  async created() {
+    try {
+      const { data } = await getHouses();
+      // 楼层遍历
+      this.foreachData(data.body.floor,this.floor)
+      //遍历朝向
+      this.foreachData(data.body.oriented,this.actionsOriented)
+      //遍历户型
+      this.foreachData(data.body.roomType,this.actions)
+    } catch (error) {
+      this.$toast.fail("加载失败");
+    }
+  },
+};
 </script>
 
 <style lang="less" scoped>

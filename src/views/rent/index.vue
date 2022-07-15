@@ -1,6 +1,8 @@
 <template>
   <div>
-    <router-view></router-view>
+    <keep-alive include="Add">
+       <router-view></router-view>
+    </keep-alive>
   </div>
 </template>
 

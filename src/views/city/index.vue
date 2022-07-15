@@ -17,7 +17,7 @@
         v-for="(item, index) in hotCity"
         :key="index"
         :clickable="true"
-        @click="serCurrentCityL(item)"
+        @click="setCurrentCityL(item)"
       />
 
       <van-index-anchor index="A" />
@@ -26,7 +26,7 @@
         v-for="item in cityList.a"
         :key="item.value"
         :clickable="true"
-        @click="serCurrentCityL(item)"
+        @click="setCurrentCityL(item)"
       />
 
       <van-index-anchor index="B" />
@@ -35,7 +35,7 @@
         v-for="item in cityList.b"
         :key="item.value"
         :clickable="true"
-        @click="serCurrentCityL(item)"
+        @click="setCurrentCityL(item)"
       />
 
       <van-index-anchor index="C" />
@@ -44,7 +44,7 @@
         v-for="item in cityList.c"
         :key="item.value"
         :clickable="true"
-        @click="serCurrentCityL(item)"
+        @click="setCurrentCityL(item)"
       />
 
       <van-index-anchor index="D" />
@@ -53,7 +53,7 @@
         v-for="item in cityList.d"
         :key="item.value"
         :clickable="true"
-        @click="serCurrentCityL(item)"
+        @click="setCurrentCityL(item)"
       />
 
       <van-index-anchor index="F" />
@@ -62,7 +62,7 @@
         v-for="item in cityList.f"
         :key="item.value"
         :clickable="true"
-        @click="serCurrentCityL(item)"
+        @click="setCurrentCityL(item)"
       />
 
       <van-index-anchor index="G" />
@@ -71,7 +71,7 @@
         v-for="item in cityList.g"
         :key="item.value"
         :clickable="true"
-        @click="serCurrentCityL(item)"
+        @click="setCurrentCityL(item)"
       />
 
       <van-index-anchor index="H" />
@@ -80,7 +80,7 @@
         v-for="item in cityList.h"
         :key="item.value"
         :clickable="true"
-        @click="serCurrentCityL(item)"
+        @click="setCurrentCityL(item)"
       />
 
       <van-index-anchor index="J" />
@@ -89,7 +89,7 @@
         v-for="item in cityList.j"
         :key="item.value"
         :clickable="true"
-        @click="serCurrentCityL(item)"
+        @click="setCurrentCityL(item)"
       />
 
       <van-index-anchor index="K" />
@@ -98,7 +98,7 @@
         v-for="item in cityList.k"
         :key="item.value"
         :clickable="true"
-        @click="serCurrentCityL(item)"
+        @click="setCurrentCityL(item)"
       />
 
       <van-index-anchor index="L" />
@@ -107,7 +107,7 @@
         v-for="item in cityList.l"
         :key="item.value"
         :clickable="true"
-        @click="serCurrentCityL(item)"
+        @click="setCurrentCityL(item)"
       />
 
       <van-index-anchor index="M" />
@@ -116,7 +116,7 @@
         v-for="item in cityList.m"
         :key="item.value"
         :clickable="true"
-        @click="serCurrentCityL(item)"
+        @click="setCurrentCityL(item)"
       />
 
       <van-index-anchor index="N" />
@@ -125,7 +125,7 @@
         v-for="item in cityList.n"
         :key="item.value"
         :clickable="true"
-        @click="serCurrentCityL(item)"
+        @click="setCurrentCityL(item)"
       />
 
       <van-index-anchor index="Q" />
@@ -134,7 +134,7 @@
         v-for="item in cityList.q"
         :key="item.value"
         :clickable="true"
-        @click="serCurrentCityL(item)"
+        @click="setCurrentCityL(item)"
       />
 
       <van-index-anchor index="S" />
@@ -143,7 +143,7 @@
         v-for="item in cityList.s"
         :key="item.value"
         :clickable="true"
-        @click="serCurrentCityL(item)"
+        @click="setCurrentCityL(item)"
       />
 
       <van-index-anchor index="T" />
@@ -152,7 +152,7 @@
         v-for="item in cityList.t"
         :key="item.value"
         :clickable="true"
-        @click="serCurrentCityL(item)"
+        @click="setCurrentCityL(item)"
       />
 
       <van-index-anchor index="W" />
@@ -161,7 +161,7 @@
         v-for="item in cityList.w"
         :key="item.value"
         :clickable="true"
-        @click="serCurrentCityL(item)"
+        @click="setCurrentCityL(item)"
       />
 
       <van-index-anchor index="X" />
@@ -170,7 +170,7 @@
         v-for="item in cityList.x"
         :key="item.value"
         :clickable="true"
-        @click="serCurrentCityL(item)"
+        @click="setCurrentCityL(item)"
       />
 
       <van-index-anchor index="Y" />
@@ -179,7 +179,7 @@
         v-for="item in cityList.y"
         :key="item.value"
         :clickable="true"
-        @click="serCurrentCityL(item)"
+        @click="setCurrentCityL(item)"
       />
 
       <van-index-anchor index="Z" />
@@ -188,7 +188,7 @@
         v-for="item in cityList.z"
         :key="item.value"
         :clickable="true"
-        @click="serCurrentCityL(item)"
+        @click="setCurrentCityL(item)"
       />
     </van-index-bar>
   </div>
@@ -197,6 +197,7 @@
 <script>
 import navBar from "@/components/navBar.vue";
 import { getCity, hotCity } from "@/apis/area";
+  import { mapMutations } from 'vuex';
 export default {
   name: "City",
   data() {
@@ -286,9 +287,12 @@ export default {
   },
   methods:{
     //修改当前城市
-    serCurrentCityL(item) {
-        console.log(item);
-    }
+    setCurrentCityL(item) {
+        this.addCurrentCityL(item)
+        this.$store.commit('setCommunity', {})
+        this.$router.push('/HomePage/home')
+    },
+    ...mapMutations(['addCurrentCityL'])
   }
 };
 </script>
