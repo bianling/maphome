@@ -8,7 +8,8 @@
         class="home-search-list"
         background="#f7f8fa"
       >
-        <span slot="label" class="search-text" @click="goCity">{{$store.state.currentCityL.label}}
+        <span slot="label" class="search-text" @click="goCity"
+          >{{ $store.state.currentCityL.label }}
           <i class="iconfont icon-xiangxia"></i>
         </span>
       </van-search>
@@ -27,27 +28,27 @@
     <!-- 导航区域 -->
     <div class="home-nav">
       <van-grid :border="false" :clickable="true">
-        <van-grid-item class="grid">
+        <van-grid-item class="grid" @click="goHome">
           <div class="home-nav-img">
-            <img src="@/assets/img/zhengzu.png" alt="" />
+            <img src="@/assets/img/zhengzu.png" />
           </div>
           <div class="text">整租</div>
         </van-grid-item>
-        <van-grid-item class="grid">
+        <van-grid-item class="grid" @click="goHome">
           <div class="home-nav-img">
-            <img src="@/assets/img/hezu.png" alt="" />
+            <img src="@/assets/img/hezu.png" />
           </div>
           <div class="text">合租</div>
         </van-grid-item>
         <van-grid-item class="grid">
           <div class="home-nav-img">
-            <img src="@/assets/img/ditu.png" alt="" />
+            <img src="@/assets/img/ditu.png" />
           </div>
           <div class="text">地图找房</div>
         </van-grid-item>
         <van-grid-item class="grid" @click="goAdd">
           <div class="home-nav-img">
-            <img src="@/assets/img/chuzu.png" alt="" />
+            <img src="@/assets/img/chuzu.png" />
           </div>
           <div class="text">去出租</div>
         </van-grid-item>
@@ -86,50 +87,56 @@
 </template>
 
 <script>
-import { bannerImg, groupList } from '@/apis/home'
+import { bannerImg, groupList } from "@/apis/home";
 export default {
-  name: 'Home',
+  name: "Home",
   data() {
     return {
       bannerImgs: [],
-      value: '',
-      groupList: []
-    }
+      value: "",
+      groupList: [],
+    };
   },
   async created() {
     // 请求banner图片
     try {
-      const { data } = await bannerImg()
+      const { data } = await bannerImg();
       // 将url拼接完整
       data.body.forEach((item) => {
-        item.imgSrc = `http://liufusong.top:8080${item.imgSrc}`
-      })
-      this.bannerImgs = data.body
+        item.imgSrc = `http://liufusong.top:8080${item.imgSrc}`;
+      });
+      this.bannerImgs = data.body;
     } catch (e) {
-      this.$toast.fail(e.message)
+      this.$toast.fail(e.message);
     }
     // 请求租房小组
-    const res = await groupList()
+    const res = await groupList();
     res.data.body.forEach((item) => {
-      item.imgSrc = `http://liufusong.top:8080${item.imgSrc}`
-    })
-    this.groupList = res.data.body
+      item.imgSrc = `http://liufusong.top:8080${item.imgSrc}`;
+    });
+    this.groupList = res.data.body;
   },
   methods: {
     // 点击去出租跳转发布房源页
     goAdd() {
       this.$router.push({
-        path: '/rent/add'
-      })
+        path: "/rent/add",
+      });
     },
     //点击跳转城市列表
-    goCity(){
+    goCity() {
       this.$router.push({
-        path:'/city'
-      })
-    }
-  }
-}
+        path: "/city",
+      });
+    },
+    //跳转找房页面
+    goHome() {
+      this.$router.push({
+        path: "/HomePage/goHome",
+      });
+    },
+  },
+};
 </script>
 
 <style lang="less" scoped>

@@ -14,182 +14,22 @@
       <van-index-anchor index="热">热门城市</van-index-anchor>
       <van-cell
         :title="item.label"
-        v-for="(item, index) in hotCity"
-        :key="index"
+        v-for="(item) in hotCity"
+        :key="item.label"
         :clickable="true"
         @click="setCurrentCityL(item)"
       />
-
-      <van-index-anchor index="A" />
+      <!-- 字母排序城市 -->
+      <div v-for="(item,index) in cityList" :key="index">
+      <van-index-anchor :index="item[0]" />
       <van-cell
-        :title="item.label"
-        v-for="item in cityList.a"
-        :key="item.value"
+        :title="obj.label"
+        v-for="obj in item[1]"
+        :key="obj.value"
         :clickable="true"
-        @click="setCurrentCityL(item)"
+        @click="setCurrentCityL(obj)"
       />
-
-      <van-index-anchor index="B" />
-      <van-cell
-        :title="item.label"
-        v-for="item in cityList.b"
-        :key="item.value"
-        :clickable="true"
-        @click="setCurrentCityL(item)"
-      />
-
-      <van-index-anchor index="C" />
-      <van-cell
-        :title="item.label"
-        v-for="item in cityList.c"
-        :key="item.value"
-        :clickable="true"
-        @click="setCurrentCityL(item)"
-      />
-
-      <van-index-anchor index="D" />
-      <van-cell
-        :title="item.label"
-        v-for="item in cityList.d"
-        :key="item.value"
-        :clickable="true"
-        @click="setCurrentCityL(item)"
-      />
-
-      <van-index-anchor index="F" />
-      <van-cell
-        :title="item.label"
-        v-for="item in cityList.f"
-        :key="item.value"
-        :clickable="true"
-        @click="setCurrentCityL(item)"
-      />
-
-      <van-index-anchor index="G" />
-      <van-cell
-        :title="item.label"
-        v-for="item in cityList.g"
-        :key="item.value"
-        :clickable="true"
-        @click="setCurrentCityL(item)"
-      />
-
-      <van-index-anchor index="H" />
-      <van-cell
-        :title="item.label"
-        v-for="item in cityList.h"
-        :key="item.value"
-        :clickable="true"
-        @click="setCurrentCityL(item)"
-      />
-
-      <van-index-anchor index="J" />
-      <van-cell
-        :title="item.label"
-        v-for="item in cityList.j"
-        :key="item.value"
-        :clickable="true"
-        @click="setCurrentCityL(item)"
-      />
-
-      <van-index-anchor index="K" />
-      <van-cell
-        :title="item.label"
-        v-for="item in cityList.k"
-        :key="item.value"
-        :clickable="true"
-        @click="setCurrentCityL(item)"
-      />
-
-      <van-index-anchor index="L" />
-      <van-cell
-        :title="item.label"
-        v-for="item in cityList.l"
-        :key="item.value"
-        :clickable="true"
-        @click="setCurrentCityL(item)"
-      />
-
-      <van-index-anchor index="M" />
-      <van-cell
-        :title="item.label"
-        v-for="item in cityList.m"
-        :key="item.value"
-        :clickable="true"
-        @click="setCurrentCityL(item)"
-      />
-
-      <van-index-anchor index="N" />
-      <van-cell
-        :title="item.label"
-        v-for="item in cityList.n"
-        :key="item.value"
-        :clickable="true"
-        @click="setCurrentCityL(item)"
-      />
-
-      <van-index-anchor index="Q" />
-      <van-cell
-        :title="item.label"
-        v-for="item in cityList.q"
-        :key="item.value"
-        :clickable="true"
-        @click="setCurrentCityL(item)"
-      />
-
-      <van-index-anchor index="S" />
-      <van-cell
-        :title="item.label"
-        v-for="item in cityList.s"
-        :key="item.value"
-        :clickable="true"
-        @click="setCurrentCityL(item)"
-      />
-
-      <van-index-anchor index="T" />
-      <van-cell
-        :title="item.label"
-        v-for="item in cityList.t"
-        :key="item.value"
-        :clickable="true"
-        @click="setCurrentCityL(item)"
-      />
-
-      <van-index-anchor index="W" />
-      <van-cell
-        :title="item.label"
-        v-for="item in cityList.w"
-        :key="item.value"
-        :clickable="true"
-        @click="setCurrentCityL(item)"
-      />
-
-      <van-index-anchor index="X" />
-      <van-cell
-        :title="item.label"
-        v-for="item in cityList.x"
-        :key="item.value"
-        :clickable="true"
-        @click="setCurrentCityL(item)"
-      />
-
-      <van-index-anchor index="Y" />
-      <van-cell
-        :title="item.label"
-        v-for="item in cityList.y"
-        :key="item.value"
-        :clickable="true"
-        @click="setCurrentCityL(item)"
-      />
-
-      <van-index-anchor index="Z" />
-      <van-cell
-        :title="item.label"
-        v-for="item in cityList.z"
-        :key="item.value"
-        :clickable="true"
-        @click="setCurrentCityL(item)"
-      />
+      </div>
     </van-index-bar>
   </div>
 </template>
@@ -197,39 +37,12 @@
 <script>
 import navBar from "@/components/navBar.vue";
 import { getCity, hotCity } from "@/apis/area";
-  import { mapMutations } from 'vuex';
+import { mapMutations } from "vuex";
 export default {
   name: "City",
   data() {
     return {
-      cityList: {
-        a: [],
-        b: [],
-        c: [],
-        d: [],
-        e: [],
-        f: [],
-        g: [],
-        h: [],
-        i: [],
-        j: [],
-        k: [],
-        l: [],
-        m: [],
-        n: [],
-        o: [],
-        p: [],
-        q: [],
-        r: [],
-        s: [],
-        t: [],
-        u: [],
-        v: [],
-        w: [],
-        x: [],
-        y: [],
-        z: [],
-      },
+      cityList: [],
       hotCity: [],
       indexList: [
         "#",
@@ -275,25 +88,42 @@ export default {
     try {
       //城市列表分类
       const { data } = await getCity();
+      console.log(data);
+      let obj = {}
+      // 获取所有数据,并且通过首字母进行分类
       data.body.forEach((item) => {
-        this.cityList[item.short.charAt(0)].push(item);
+        let letter = item.short.charAt(0).toUpperCase();
+        if (!obj[letter]) {
+          obj[letter] = [];
+          obj[letter][0] = item.short.charAt(0).toUpperCase();
+          obj[letter][1] = [];
+        }
+        obj[letter][1].push(item);
       });
+      //将key值进行排序并且把数据全部转化为数组方便渲染页面
+      const newkey = Object.keys(obj).sort()
+       newkey.forEach(item => {
+        this.cityList.push(obj[item])
+        })
+        console.log(this.cityList);
       // 加载完毕 关闭加载提示
       this.$toast.loading({
         message: "加载中",
         duration: 1,
       });
-    } catch (error) {}
+    } catch (error) {
+      this.$toast.fail('数据加载失败')
+    }
   },
-  methods:{
+  methods: {
     //修改当前城市
     setCurrentCityL(item) {
-        this.addCurrentCityL(item)
-        this.$store.commit('setCommunity', {})
-        this.$router.push('/HomePage/home')
+      this.addCurrentCityL(item);
+      this.$store.commit("setCommunity", {});
+      this.$router.back();
     },
-    ...mapMutations(['addCurrentCityL'])
-  }
+    ...mapMutations(["addCurrentCityL"]),
+  },
 };
 </script>
 

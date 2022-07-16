@@ -4,7 +4,7 @@
     <router-view></router-view>
     <!-- 二级路由 -->
     <!-- 底部导航栏 -->
-    <van-tabbar v-model="active" class="HomePagefooter" route>
+    <van-tabbar class="HomePagefooter" route>
       <van-tabbar-item icon="home-o" to="/HomePage/home">
         首页
       </van-tabbar-item>
@@ -24,13 +24,11 @@
 
 <script>
 export default {
-  name: 'HomePage',
+  name: "HomePage",
   data() {
-    return {
-      active: 0
-    }
-  }
-}
+    return {};
+  },
+};
 </script>
 
 <style lang="less" scoped>
