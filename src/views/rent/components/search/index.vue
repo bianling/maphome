@@ -9,7 +9,8 @@
           @search="onSearch"
           @cancel="onCancel"
           @input="getCommunity"
-        />
+        >
+        </van-search>
       </form>
     </div>
     <van-cell
@@ -86,4 +87,6 @@ export default {
     color: #6b7072;
   }
 }
+
+
 </style>

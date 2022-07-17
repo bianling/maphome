@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div class="go-map" @click="goMap"></div>
     <!-- 导航栏 -->
     <navBar />
     <!-- 导航栏 -->
@@ -19,58 +20,33 @@
     </div>
     <!-- 搜索框 -->
     <!-- 下拉选择 -->
-    <van-dropdown-menu>
-      <van-dropdown-item v-model="value1" :options="option1" />
-      <van-dropdown-item v-model="value2" :options="option2" />
-    </van-dropdown-menu>
-    <!-- 下拉选择 -->
-    <van-area title="标题" :area-list="areaList" />
+    <Confirm />
   </div>
 </template>
 
 <script>
 import navBar from "@/components/navBar.vue";
+import Confirm from "./components/Confirm.vue";
+
 export default {
   name: "goHome",
   data() {
-    return {
-      value1: 0,
-      value2: "a",
-      option1: [
-        { text: "全部商品", value: 0 },
-        { text: "新款商品", value: 1 },
-        { text: "活动商品", value: 2 },
-      ],
-      option2: [
-        { text: "默认排序", value: "a" },
-        { text: "好评排序", value: "b" },
-        { text: "销量排序", value: "c" },
-      ],
-      areaList: {
-        province_list: {
-          110000: "北京市",
-          120000: "天津市",
-        },
-        city_list: {
-          110100: "北京市",
-          120100: "天津市",
-        },
-        county_list: {
-          110101: "东城区",
-          110102: "西城区",
-          // ....
-        },
-      },
-    };
+    return {};
   },
   components: {
     navBar,
+    Confirm,
   },
   methods: {
     //点击跳转城市列表
     goCity() {
       this.$router.push({
         path: "/city",
+      });
+    },
+    goMap() {
+      this.$router.push({
+        path: "/detail",
       });
     },
   },
@@ -112,5 +88,13 @@ export default {
     line-height: 34px;
     margin-left: 5px;
   }
+}
+.go-map {
+  position: absolute;
+  top: 10px;
+  right: 13px;
+  z-index: 9999999999;
+  width: 25px;
+  height: 25px;
 }
 </style>

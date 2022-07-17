@@ -72,56 +72,65 @@
 </template>
 
 <script>
-import { userInfo, logout } from '@/apis/user'
+import { userInfo, logout } from "@/apis/user";
+import { mapState } from "vuex";
 export default {
-  name: 'My',
+  name: "My",
   data() {
     return {
-      userInfo: {}
-    }
+      userInfo: {},
+    };
   },
   methods: {
     // 跳转登录页面
     goLogin() {
-      this.$toast.loading('加载中')
+      this.$toast.loading("加载中");
       this.$router.push({
-        path: '/login'
-      })
-      this.$toast.success('加载成功')
+        path: "/login",
+      });
+      this.$toast.success("加载成功");
     },
     // 退出登录
     noLogin() {
       this.$dialog
         .confirm({
-          title: '提示',
-          message: '是否确定退出'
+          title: "提示",
+          message: "是否确定退出",
         })
         .then(async () => {
           try {
-            const { data } = await logout()
-            this.$toast.loading('退出中')
-            this.$store.commit('addToken', null)
-            this.$toast.success(data.description)
+            const { data } = await logout();
+            this.$toast.loading("退出中");
+            this.$store.commit("addToken", null);
+            this.$toast.success(data.description);
           } catch (error) {
-            this.$toast.fail('登出失败')
+            this.$toast.fail("登出失败");
           }
-        })
-    }
+        });
+    },
   },
   async created() {
     try {
-      const { data } = await userInfo()
-      this.userInfo = data.body
+      //判断token是否有效或者存在
+      if (this.token) {
+        const { data } = await userInfo();
+        if (!data.body) {
+          throw "Error";
+        }
+        this.userInfo = data.body;
+      }
     } catch (e) {
-      this.$toast.fail(e.message)
+      this.$toast.fail("用户认证失败或已过期");
+      this.$store.commit("addToken", null);
     }
   },
   computed: {
     userImg() {
-      return `http://liufusong.top:8080${this.userInfo.avatar}`
-    }
-  }
-}
+      return `http://liufusong.top:8080${this.userInfo.avatar}`;
+    },
+    ...mapState(["token"]),
+  },
+};
 </script>
 
 <style lang="less" scoped>

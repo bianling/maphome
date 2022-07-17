@@ -8,7 +8,7 @@
       highlight-color="#fff"
       :sticky="false"
     >
-      <van-index-anchor index="#">当前城市</van-index-anchor>
+      <van-index-anchor >当前城市</van-index-anchor>
       <van-cell :title="$store.state.currentCityL.label" :clickable="true" />
 
       <van-index-anchor index="热">热门城市</van-index-anchor>
@@ -44,29 +44,7 @@ export default {
     return {
       cityList: [],
       hotCity: [],
-      indexList: [
-        "#",
-        "热",
-        "A",
-        "B",
-        "C",
-        "D",
-        "F",
-        "G",
-        "H",
-        "J",
-        "K",
-        "L",
-        "M",
-        "N",
-        "Q",
-        "S",
-        "T",
-        "W",
-        "X",
-        "Y",
-        "Z",
-      ],
+      indexList: ["热"],
     };
   },
   components: {
@@ -82,13 +60,8 @@ export default {
       });
       const res = await hotCity();
       this.hotCity = res.data.body;
-    } catch (error) {}
-
-    //获取城市列表
-    try {
       //城市列表分类
       const { data } = await getCity();
-      console.log(data);
       let obj = {}
       // 获取所有数据,并且通过首字母进行分类
       data.body.forEach((item) => {
@@ -104,8 +77,8 @@ export default {
       const newkey = Object.keys(obj).sort()
        newkey.forEach(item => {
         this.cityList.push(obj[item])
+        this.indexList.push(item)
         })
-        console.log(this.cityList);
       // 加载完毕 关闭加载提示
       this.$toast.loading({
         message: "加载中",
@@ -146,5 +119,9 @@ export default {
   font-size: 14px !important;
   padding: 6px !important;
   margin-right: 5px;
+}
+/deep/.van-index-anchor{
+  color: #b5b5b5;
+  font-size: 15px;
 }
 </style>

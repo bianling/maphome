@@ -7,3 +7,14 @@ export const getHouses = () => {
         url: '/houses/params'
     })
 }
+
+//获取房屋查询条件
+export const getCondition = (id) => {
+    return request({
+        method: 'GET',
+        url: '/houses/condition',
+        params: {
+            id
+        }
+    })
+}

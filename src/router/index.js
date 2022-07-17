@@ -68,6 +68,15 @@ const routes = [
   {
     path: '/city',
     component: () => import('@/views/city')
+  },
+  // 具体商品内容
+  {
+    path: '/detail',
+    component: () => import('@/views/detail')
+  },
+  {
+    path: '/map',
+    component: () => import('@/views/map')
   }
 ]
 
