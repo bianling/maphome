@@ -1,6 +1,11 @@
 <template>
   <div>
-    <div class="list-item" v-for="item in List" :key="item.houseCode">
+    <div
+      class="list-item"
+      v-for="item in List"
+      :key="item.houseCode"
+      @click="goDetail(item.houseCode)"
+    >
       <div class="left">
         <img :src="item.houseImg" />
       </div>
@@ -13,8 +18,8 @@
           </span>
         </div>
         <div class="price">
-          <span>{{ item.price }}</span
-          >元/月
+          <span>{{ item.price }}</span>
+          元/月
         </div>
       </div>
     </div>
@@ -23,12 +28,22 @@
 
 <script>
 export default {
-  name: 'ListCell',
+  name: "ListCell",
   props: {
     List: Array,
-    required: true
-  }
-}
+    required: true,
+  },
+  methods: {
+    goDetail(id) {
+      this.$router.push({
+        path: `/detail`,
+        query: {
+          id,
+        },
+      });
+    },
+  },
+};
 </script>
 
 <style lang="less" scoped>
@@ -57,6 +72,10 @@ export default {
       .title {
         height: 22px;
         font-size: 15px;
+        /*超出部分隐藏*/
+        overflow: hidden;
+        /*文本超出部分省略*/
+        text-overflow: ellipsis;
       }
       .desc {
         height: 22px;
@@ -68,10 +87,9 @@ export default {
         height: 22px;
         line-height: 22px;
         span {
-          position: absolute;
+          padding: 3px;
           top: 1px;
           display: inline-block;
-          width: 46px;
           height: 20px;
           text-align: center;
           line-height: 20px;

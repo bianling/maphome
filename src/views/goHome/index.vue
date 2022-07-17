@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="goHome">
     <div class="go-map" @click="goMap"></div>
     <!-- 导航栏 -->
     <navBar />
@@ -21,12 +21,18 @@
     <!-- 搜索框 -->
     <!-- 下拉选择 -->
     <Confirm />
+    <!-- 列表渲染 -->
+    <div class="favorate-list">
+      <ListCell :List="searchList"></ListCell>
+    </div>
   </div>
 </template>
 
 <script>
 import navBar from "@/components/navBar.vue";
 import Confirm from "./components/Confirm.vue";
+import ListCell from "@/components/ListCell";
+import { mapState } from "vuex";
 
 export default {
   name: "goHome",
@@ -36,6 +42,7 @@ export default {
   components: {
     navBar,
     Confirm,
+    ListCell,
   },
   methods: {
     //点击跳转城市列表
@@ -44,16 +51,23 @@ export default {
         path: "/city",
       });
     },
-    goMap() {
+    goMap(e) {
+      e.stopPropagation();
       this.$router.push({
-        path: "/detail",
+        path: "/map",
       });
     },
+  },
+  computed: {
+    ...mapState(["searchList"]),
   },
 };
 </script>
 
 <style lang="less" scoped>
+.goHome {
+  padding-bottom: 45px;
+}
 .home-search {
   display: flex;
   justify-content: space-between;
@@ -93,7 +107,7 @@ export default {
   position: absolute;
   top: 10px;
   right: 13px;
-  z-index: 9999999999;
+  z-index: 999;
   width: 25px;
   height: 25px;
 }

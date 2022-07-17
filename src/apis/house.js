@@ -18,3 +18,21 @@ export const getCondition = (id) => {
         }
     })
 }
+
+//根据条件查询房屋 /houses
+export const getHousesAll = (params) => {
+    return request({
+        method: 'GET',
+        url: '/houses',
+        params
+    })
+}
+
+
+//获取具体房源数据
+export const getMap = (id) => {
+    return request({
+        method: 'GET',
+        url: `/houses/${id}`,
+    })
+}

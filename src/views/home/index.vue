@@ -29,13 +29,13 @@
     <!-- 导航区域 -->
     <div class="home-nav">
       <van-grid :border="false" :clickable="true">
-        <van-grid-item class="grid" @click="goHome">
+        <van-grid-item class="grid" @click="goHomeTrue">
           <div class="home-nav-img">
             <img src="@/assets/img/zhengzu.png" />
           </div>
           <div class="text">整租</div>
         </van-grid-item>
-        <van-grid-item class="grid" @click="goHome">
+        <van-grid-item class="grid" @click="goHomeFalse">
           <div class="home-nav-img">
             <img src="@/assets/img/hezu.png" />
           </div>
@@ -89,6 +89,7 @@
 
 <script>
 import { bannerImg, groupList } from "@/apis/home";
+import { mapMutations } from "vuex";
 export default {
   name: "Home",
   data() {
@@ -130,8 +131,16 @@ export default {
         path: "/city",
       });
     },
-    //跳转找房页面
-    goHome() {
+    //跳转整租页面
+    goHomeTrue() {
+      this.setParameters(["true", 4]);
+      this.$router.push({
+        path: "/HomePage/goHome",
+      });
+    },
+    //跳转合租页面
+    goHomeFalse() {
+      this.setParameters(["false", 4]);
       this.$router.push({
         path: "/HomePage/goHome",
       });
@@ -142,6 +151,7 @@ export default {
         path: "/map",
       });
     },
+    ...mapMutations(["setParameters"]),
   },
 };
 </script>
