@@ -51,14 +51,20 @@
         <Btn title="朝向" :data="oriented" />
         <Btn title="楼层" :data="floor" />
         <Btn title="朝向" :data="characteristic" />
-        <van-button type="default" class="vanbtn vanbtn-yes">清空</van-button>
-        <van-button
-          type="primary"
-          class="vanbtn vanbtn-no"
-          @click="show = false"
-          >确认</van-button
-        >
       </van-popup>
+      <transition name="fade">
+        <div class="popup-btn" v-show="show">
+          <van-button type="default" class="vanbtn vanbtn-yes" @click="empty"
+            >清空
+          </van-button>
+          <van-button
+            type="primary"
+            class="vanbtn vanbtn-no"
+            @click="show = false"
+            >确认
+          </van-button>
+        </div>
+      </transition>
       <!-- 筛选 -->
     </van-dropdown-menu>
   </div>
@@ -128,12 +134,6 @@ export default {
       this.forData(data.body.subway, this.newData);
       this.columns.push(this.newData);
       //区域数据调整
-      //   加载结束
-      this.$toast.loading({
-        message: "加载中",
-        duration: 1,
-      });
-      //   加载结束
     } catch (error) {
       console.log(error);
     }
@@ -147,6 +147,12 @@ export default {
         //将查询出来的列表数据传给vuex
         const { data } = await getHousesAll(this.parameters);
         this.setSearchList(data.body.list);
+        //   加载结束
+        this.$toast.loading({
+          message: "加载中",
+          duration: 1,
+        });
+        //   加载结束
       } catch (err) {
         console.log(err);
       }
@@ -172,6 +178,12 @@ export default {
     },
     // 关闭弹出层时触发
     async closeFn() {
+      // 开始加载
+      this.$toast.loading({
+        message: "加载中",
+        duration: 0,
+      });
+      // 开始加载
       this.$refs.dropdown.toggle(); //双重遮罩,关闭第二重
       this.show = false;
       //关闭遮罩进行查询
@@ -179,17 +191,35 @@ export default {
         //将查询出来的列表数据传给vuex
         const { data } = await getHousesAll(this.parameters);
         this.setSearchList(data.body.list);
+        // 加载结束
+        this.$toast.loading({
+          message: "加载中",
+          duration: 1,
+        });
+        // 加载结束
       } catch (err) {
         console.log(err);
       }
     },
     //点击区域获取区域id并进行搜索
     async areaFn() {
+      // 开始加载
+      this.$toast.loading({
+        message: "加载中",
+        duration: 0,
+      });
+      // 开始加载
       this.setParameters([this.$refs.picker.getValues()[2].value, 2]);
       this.$refs.item.toggle();
       try {
         const { data } = await await getHousesAll(this.parameters);
         this.setSearchList(data.body.list);
+        // 加载结束
+        this.$toast.loading({
+          message: "加载中",
+          duration: 1,
+        });
+        // 加载结束
       } catch (error) {}
     },
     areaOut() {
@@ -197,25 +227,60 @@ export default {
     },
     //修改方式时候触发
     async value2Change(val) {
+      // 开始加载
+      this.$toast.loading({
+        message: "加载中",
+        duration: 0,
+      });
+      // 开始加载
       this.setParameters([val, 4]);
       try {
         //将查询出来的列表数据传给vuex
         const { data } = await getHousesAll(this.parameters);
         this.setSearchList(data.body.list);
+
+        // 加载结束
+        this.$toast.loading({
+          message: "加载中",
+          duration: 1,
+        });
+        // 加载结束
       } catch (err) {
         console.log(err);
       }
     },
     //修改租金时触发
     async value3Change(val) {
+      // 开始加载
+      this.$toast.loading({
+        message: "加载中",
+        duration: 0,
+      });
+      // 开始加载
       this.setParameters([val, 5]);
       try {
         //将查询出来的列表数据传给vuex
         const { data } = await getHousesAll(this.parameters);
         this.setSearchList(data.body.list);
+        // 加载结束
+        this.$toast.loading({
+          message: "加载中",
+          duration: 1,
+        });
+        // 加载结束
       } catch (err) {
         console.log(err);
       }
+    },
+    //清空btn
+    empty() {
+      this.setParameters(["", 4]);
+      this.setParameters(["", 8]);
+      this.setParameters(["", 10]);
+      this.setParameters(["", 9]);
+      this.$children[0].$children[4].$children.forEach((item) => {
+        item.selectionIndex = -1;
+      });
     },
     ...mapMutations(["setParameters", "setSearchList"]),
   },
@@ -231,17 +296,31 @@ export default {
 <style lang="less" scoped>
 .popup {
   padding-bottom: 45px;
+}
+.popup-btn {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  z-index: 999999;
+  width: 80%;
+  height: 45px;
+
+  transition: .13s;
   .vanbtn {
-    position: fixed;
     height: 45px;
   }
   .vanbtn-no {
     right: 0;
-    width: 196px;
+    width: 65%;
   }
   .vanbtn-yes {
     left: 0;
-    width: 108px;
+    width: 35%;
   }
 }
+
+.fade-enter-active, .fade-leave-active {
+  transform: translateX(100%);
+}
+
 </style>

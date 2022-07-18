@@ -86,6 +86,10 @@ export default {
         position: relative;
         height: 22px;
         line-height: 22px;
+                /*超出部分隐藏*/
+        overflow: hidden;
+        /*文本超出部分省略*/
+        text-overflow: ellipsis;
         span {
           padding: 3px;
           top: 1px;

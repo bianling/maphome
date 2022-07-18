@@ -63,3 +63,27 @@ export const addHouses = (data) => {
         body: data
     })
 }
+
+//获取用户是否收藏 /user/favorites/{id}
+export const getFavorites = (id) => {
+    return request({
+        method: 'GET',
+        url: `/user/favorites/${id}`
+    })
+}
+
+//添加收藏
+export const addFavorites = (id) => {
+    return request({
+        method: 'POST',
+        url: `/user/favorites/${id}`
+    })
+}
+
+//取消收藏
+export const removeFavorites = (id) => {
+    return request({
+        method: 'DELETE',
+        url: `/user/favorites/${id}`
+    })
+}

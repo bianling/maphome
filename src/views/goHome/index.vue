@@ -1,6 +1,5 @@
 <template>
   <div class="goHome">
-    <div class="go-map" @click="goMap"></div>
     <!-- 导航栏 -->
     <navBar />
     <!-- 导航栏 -->
@@ -16,15 +15,25 @@
           <i class="iconfont icon-xiangxia"></i>
         </span>
       </van-search>
-      <van-icon name="location-o" class="search-icon" />
+      <van-icon name="location-o" class="search-icon"  @click="goMap"/>
     </div>
     <!-- 搜索框 -->
     <!-- 下拉选择 -->
     <Confirm />
     <!-- 列表渲染 -->
-    <div class="favorate-list">
-      <ListCell :List="searchList"></ListCell>
+    <div class="favorate-list" v-if="searchList[0]">
+      <!-- 触底刷新 -->
+      <van-list
+        v-model="loading"
+        :finished="finished"
+        finished-text="没有更多了"
+        @load="onLoad"
+      >
+        <ListCell :List="searchList"></ListCell>
+      </van-list>
+      <!-- 触底刷新 -->
     </div>
+    <div v-else class="none">暂无数据房源数据~~~</div>
   </div>
 </template>
 
@@ -37,7 +46,10 @@ import { mapState } from "vuex";
 export default {
   name: "goHome",
   data() {
-    return {};
+    return {
+      loading: false,
+      finished: false,
+    };
   },
   components: {
     navBar,
@@ -56,6 +68,12 @@ export default {
       this.$router.push({
         path: "/map",
       });
+    },
+    //下拉刷新
+    onLoad() {
+      if(this.searchList.length<=20){
+        this.finished=true
+      }
     },
   },
   computed: {
@@ -103,12 +121,8 @@ export default {
     margin-left: 5px;
   }
 }
-.go-map {
-  position: absolute;
-  top: 10px;
-  right: 13px;
-  z-index: 999;
-  width: 25px;
-  height: 25px;
+.none {
+  text-align: center;
+  margin-top: 20px;
 }
 </style>

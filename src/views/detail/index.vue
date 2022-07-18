@@ -71,12 +71,58 @@
     <div class="about">
       <div class="one">房源概述</div>
     </div>
+    <div class="summary">
+      <div class="top">
+        <div><img src="@/assets/img/avatar (1).png" /></div>
+        <div class="people">
+          <p>王女士</p>
+          <span>
+            <van-icon name="passed" />
+            已认证房东
+          </span>
+        </div>
+        <div class="summary-btn">发消息</div>
+      </div>
+      <div class="bottom">
+        1.周边配套齐全，地铁四号线陶然亭站，交通便利，公交云集，距离北京南站、西站都很近距离。
+        2.小区规模大，配套全年，幼儿园，体育场，游泳馆，养老院，小学。
+        3.人车分流，环境优美。
+        4.精装两居室，居家生活方便，还有一个小书房，看房随时联系。
+      </div>
+    </div>
+    <div class="bg"></div>
+    <!-- 猜你喜欢 -->
+    <div class="like about">
+      <div class="one">猜你喜欢</div>
+      <div class="favorate-list">
+        <ListCell :List="list" />
+      </div>
+    </div>
+    <!-- 猜你喜欢 -->
+    <!-- 底部资讯部分-->
+    <footer>
+      <div class="one" @click="isLike">
+        <i
+          class="iconfont"
+          :class="{
+            'icon-xingxing1': isFavorite,
+            'icon-xingxing2': !isFavorite,
+          }"
+        ></i>
+        收藏
+      </div>
+      <div>在线咨询</div>
+      <div class="phone">电话预约</div>
+    </footer>
+    <!-- 底部咨询部份 -->
   </div>
 </template>
 
 <script>
 import navBar from "@/components/navBar.vue";
 import { getMap } from "@/apis/house";
+import { getFavorites, addFavorites, removeFavorites } from "@/apis/user";
+import ListCell from "@/components/ListCell.vue";
 export default {
   data() {
     return {
@@ -134,11 +180,40 @@ export default {
           id: 10,
         },
       ],
+      isFavorite: false,
+      list: [
+        {
+          houseImg: "http://liufusong.top:8080/img/message/1.png",
+          title: "安贞西里3室1厅",
+          tags: ["随时看房"],
+          price: 4500,
+          desc: "72.32m/南北/低楼层",
+          houseCode: "f12e5910-dcb3-1460",
+        },
+        {
+          houseImg: "http://liufusong.top:8080/img/message/2.png",
+          title: "天居园2室1厅",
+          tags: ["近地铁"],
+          price: 7200,
+          desc: "83m/南/高楼层",
+          houseCode: "215316c2-1303-5b2e",
+        },
+        {
+          houseImg: "http://liufusong.top:8080/img/message/3.png",
+          title: "角门甲4号院1室1月",
+          tags: ["集中供暖"],
+          price: 4300,
+          desc: "52mf/西南/低楼层",
+          houseCode: "48691d67-9512-f54c",
+        },
+      ],
     };
   },
   created() {
     //获取数据
     this.getMap(this.$route.query.id);
+    //获取是否收藏
+    this.getFavorites(this.$route.query.id);
   },
   methods: {
     //获取数据
@@ -151,9 +226,43 @@ export default {
         console.log(err);
       }
     },
+    //获取用户收藏状态
+    async getFavorites(id) {
+      try {
+        const { data } = await getFavorites(id);
+        this.isFavorite = data.body.isFavorite;
+      } catch (error) {}
+    },
+    //修改客户收藏状态()
+    async isLike() {
+      console.log(1);
+      if (this.isFavorite) {
+        this.$toast.loading({
+          message: "加载中",
+          duration: 0,
+        });
+        await removeFavorites(this.$route.query.id);
+        this.$toast.success({
+          message: "已取消收藏",
+          duration: 1,
+        });
+      } else {
+        this.$toast.loading({
+          message: "加载中",
+          duration: 0,
+        });
+        await addFavorites(this.$route.query.id);
+        this.$toast.success({
+          message: "收藏成功",
+          duration: 1,
+        });
+      }
+      this.isFavorite = !this.isFavorite;
+    },
   },
   components: {
     navBar,
+    ListCell,
   },
   computed: {
     //判断房屋配置，并返回
@@ -174,12 +283,83 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.summary {
+  .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 8px 0;
+    height: 80px;
+    background-color: #fff;
+    img {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+    }
+    .people {
+      flex: 1;
+      margin-left: 5px;
+      p {
+        color: #333;
+        font-size: 14px;
+      }
+      span {
+        font-size: 13px;
+        color: #fa5741;
+      }
+    }
+    .summary-btn {
+      width: 75px;
+      height: 30px;
+      color: #33be85;
+      border: #33be85 1px solid;
+      font-size: 14px;
+      text-align: center;
+      line-height: 30px;
+    }
+  }
+  .bottom {
+    padding: 8px;
+    font-size: 14px;
+    color: #333;
+    background-color: #fff;
+  }
+}
+footer {
+  position: fixed;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  font-size: 17px;
+  height: 45px;
+  width: 100%;
+  background-color: #fff;
+  color: #999999;
+  border-top: 1px solid #e8e8e9;
+  div {
+    height: 100%;
+    line-height: 45px;
+    text-align: center;
+    flex: 1;
+  }
+  .one {
+    border-right: 1px solid #e8e8e9;
+    .icon-xingxing1 {
+      color: red;
+    }
+  }
+  .phone {
+    background-color: #21b97a;
+    color: #fff;
+  }
+}
 .flag {
   font-size: 12px;
 }
 .detail {
   background-color: #f6f5f6;
   min-height: 100vh;
+  padding-bottom: 45px;
 }
 // vant组件库轮播图样式
 .my-swipe .van-swipe-item {
@@ -291,4 +471,5 @@ export default {
 .bg {
   height: 10px;
 }
+
 </style>

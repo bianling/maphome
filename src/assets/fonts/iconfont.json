@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "1032410",
+      "name": "星星",
+      "font_class": "xingxing1",
+      "unicode": "e642",
+      "unicode_decimal": 58946
+    },
+    {
+      "icon_id": "10715456",
+      "name": "星星",
+      "font_class": "xingxing2",
+      "unicode": "e639",
+      "unicode_decimal": 58937
+    },
+    {
       "icon_id": "658907",
       "name": "洗衣机",
       "font_class": "xiyiji",

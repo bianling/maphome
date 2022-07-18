@@ -36,6 +36,19 @@ export default {
   methods: {
     //点击赛选中的每一项进行vuex中数据的修改
     clickFn(index, val) {
+      if(this.selectionIndex==index){
+        this.selectionIndex =-1
+        if (val.includes("ROOM")) {
+        this.setParameters(['', 4]);
+      } else if (val.includes("ORIEN")) {
+        this.setParameters(['', 8]);
+      } else if (val.includes("FLOOR")) {
+        this.setParameters(['', 10]);
+      } else if (val.includes("CHAR")) {
+        this.setParameters(['', 9]);
+      }
+        return
+      }
       this.selectionIndex = index;
       if (val.includes("ROOM")) {
         this.setParameters([val, 4]);

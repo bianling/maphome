@@ -10,12 +10,11 @@
       >
         <span slot="label" class="search-text" @click="goCity"
           >{{ $store.state.currentCityL.label }}
-          <i class="iconfont icon-xiangxia" @click="goMap"></i>
+          <i class="iconfont icon-xiangxia"></i>
         </span>
       </van-search>
-      <van-icon name="location-o" class="search-icon" />
+      <van-icon name="location-o" class="search-icon" @click="goMap"/>
     </div>
-    <div class="go-map" @click="goMap"></div>
     <!-- 搜索框区域 -->
     <!-- 轮播图区域 -->
     <div class="home-banner">
@@ -263,13 +262,5 @@ export default {
     }
   }
 }
-.go-map {
-  position: absolute;
-  top: 30px;
-  right: 18px;
-  z-index: 999;
-  background-color: transparent;
-  width: 25px;
-  height: 25px;
-}
+
 </style>
