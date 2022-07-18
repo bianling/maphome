@@ -84,11 +84,9 @@ export default {
   methods: {
     // 跳转登录页面
     goLogin() {
-      this.$toast.loading("加载中");
       this.$router.push({
         path: "/login",
       });
-      this.$toast.success("加载成功");
     },
     // 退出登录
     noLogin() {

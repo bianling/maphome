@@ -37,22 +37,21 @@
 
 <script>
 // 账号:hzhmqd密码:123456
-import { login } from "@/apis/user";
+import { login } from '@/apis/user'
 export default {
-  name: "Login",
+  name: 'Login',
   data() {
     return {
-      username: "",
-      password: "",
+      username: '',
+      password: '',
       usernameReg: /^[a-zA-Z\d]{4,15}$/, // 匹配用户名正则
-      passwordReg: /^[a-zA-Z\d]{4,15}$/, // 匹配用户密码正则
-    };
+      passwordReg: /^[a-zA-Z\d]{4,15}$/ // 匹配用户密码正则
+    }
   },
   methods: {
     // 退出
     onClickLeft() {
-      this.$router.back();
-      this.$toast("返回");
+      this.$router.back()
     },
     // 登录Submit事件
     async login() {
@@ -61,34 +60,33 @@ export default {
         !this.usernameReg.test(this.username) ||
         !this.passwordReg.test(this.password)
       ) {
-        return this.$toast.fail("账号或密码格式不正确");
+        return this.$toast.fail('账号或密码格式不正确')
       }
 
       try {
         // 登陆成功
         this.$toast.loading({
-          message: "登陆中",
-          duration: 0,
-        });
+          message: '登陆中',
+          duration: 0
+        })
 
-        const { data } = await login(this.username, this.password);
-        this.$store.commit("addToken", data.body.token);
-        this.$toast.success(data.description);
+        const { data } = await login(this.username, this.password)
+        this.$store.commit('addToken', data.body.token)
+        this.$toast.success(data.description)
         // 登陆成功 跳转首页
         this.$router.push({
-          path: "/",
-        });
-        this.$toast.success("登录成功");
+          path: '/'
+        })
+        this.$toast.success('登录成功')
       } catch (e) {
-        console.log(e);
         // 登陆失败
-        this.$toast.fail("账号或密码错误");
+        this.$toast.fail('账号或密码错误')
       }
     },
     // 注册跳转
-    registerFn() {},
-  },
-};
+    registerFn() {}
+  }
+}
 </script>
 
 <style lang="less" scoped>

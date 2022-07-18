@@ -1,5 +1,11 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import store from '@/store/index'
+
+const originalPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch((err) => err)
+}
 
 Vue.use(VueRouter)
 
@@ -35,12 +41,19 @@ const routes = [
   // 登陆页面
   {
     path: '/login',
-    component: () => import('@/views/Login')
+    component: () => import('@/views/Login'),
   },
   // 收藏
   {
     path: '/favorate',
-    component: () => import('@/views/favorate')
+    component: () => import('@/views/favorate'),
+    beforeEnter: (to, from, next) => {
+      if (store.state.token) {
+        next()
+      } else {
+        return next('/login')
+      }
+    },
   },
   // 出租1级路由
   {
@@ -50,12 +63,26 @@ const routes = [
       // 我的出租
       {
         path: '',
-        component: () => import('@/views/rent/components/rentIndex')
+        component: () => import('@/views/rent/components/rentIndex'),
+        beforeEnter: (to, from, next) => {
+          if (store.state.token) {
+            next()
+          } else {
+            return next('/login')
+          }
+        },
       },
       // 添加房源
       {
         path: 'add',
-        component: () => import('@/views/rent/components/add')
+        component: () => import('@/views/rent/components/add'),
+        beforeEnter: (to, from, next) => {
+          if (store.state.token) {
+            next()
+          } else {
+            return next('/login')
+          }
+        },
       },
       // 添加房源搜索区域
       {

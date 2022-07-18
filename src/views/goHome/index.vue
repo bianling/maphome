@@ -74,7 +74,6 @@ export default {
       this.setStartEnd(); //让开始项和结束项各自加20
       try {
         const { data } = await getHousesAll(this.parameters);
-        console.log(data.body);
         if (data.body.count === this.searchList.length) {
           //数据请求总量等于数据库结束下拉请求
           this.finished = true;
