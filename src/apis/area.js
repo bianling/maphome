@@ -31,3 +31,14 @@ export const hotCity = () => {
         url: '/area/hot',
     })
 }
+
+//获取地图坐标/area/map
+export const getMap = (id) => {
+    return request({
+        method: 'GET',
+        url: '/area/map',
+        params: {
+            id
+        }
+    })
+}
