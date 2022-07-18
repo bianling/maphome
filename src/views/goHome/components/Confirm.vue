@@ -186,6 +186,7 @@ export default {
       // 开始加载
       this.$refs.dropdown.toggle(); //双重遮罩,关闭第二重
       this.show = false;
+      this.$parent.finished = false;
       //关闭遮罩进行查询
       try {
         //将查询出来的列表数据传给vuex
@@ -210,6 +211,7 @@ export default {
       });
       // 开始加载
       this.setParameters([this.$refs.picker.getValues()[2].value, 2]);
+      this.$parent.finished = false;
       this.$refs.item.toggle();
       try {
         const { data } = await await getHousesAll(this.parameters);
@@ -234,6 +236,7 @@ export default {
       });
       // 开始加载
       this.setParameters([val, 4]);
+      this.$parent.finished = false;
       try {
         //将查询出来的列表数据传给vuex
         const { data } = await getHousesAll(this.parameters);
@@ -258,6 +261,7 @@ export default {
       });
       // 开始加载
       this.setParameters([val, 5]);
+      this.$parent.finished = false;
       try {
         //将查询出来的列表数据传给vuex
         const { data } = await getHousesAll(this.parameters);
@@ -278,6 +282,7 @@ export default {
       this.setParameters(["", 8]);
       this.setParameters(["", 10]);
       this.setParameters(["", 9]);
+      this.$parent.finished = false;
       this.$children[0].$children[4].$children.forEach((item) => {
         item.selectionIndex = -1;
       });
@@ -305,7 +310,7 @@ export default {
   width: 80%;
   height: 45px;
 
-  transition: .13s;
+  transition: 0.13s;
   .vanbtn {
     height: 45px;
   }
@@ -319,8 +324,8 @@ export default {
   }
 }
 
-.fade-enter-active, .fade-leave-active {
+.fade-enter-active,
+.fade-leave-active {
   transform: translateX(100%);
 }
-
 </style>

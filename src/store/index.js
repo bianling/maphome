@@ -28,11 +28,19 @@ export default new Vuex.Store({
       oriented: '',//朝向
       characteristic: '',//标签
       floor: '',//楼层
+      start: 1,//开始项目
+      end: 20//结束项目
     }
   },
   getters: {
   },
   mutations: {
+    //修改开始项目和结束项目
+    setStartEnd(state) {
+      state.parameters.end += 20
+      state.parameters.start += 20
+      console.log(state.parameters);
+    },
     setParameters(state, val) {
       if (val[1] == 1) {
         state.parameters.id = val[0]
@@ -55,6 +63,8 @@ export default new Vuex.Store({
       } else if (val[1] == 10) {
         state.parameters.floor = val[0]
       }
+      state.parameters.end = 20
+      state.parameters.start = 1
       console.log(state.parameters);
     },
     //修改搜索出来的数据列表

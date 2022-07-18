@@ -15,7 +15,7 @@
           <i class="iconfont icon-xiangxia"></i>
         </span>
       </van-search>
-      <van-icon name="location-o" class="search-icon"  @click="goMap"/>
+      <van-icon name="location-o" class="search-icon" @click="goMap" />
     </div>
     <!-- 搜索框 -->
     <!-- 下拉选择 -->
@@ -41,8 +41,8 @@
 import navBar from "@/components/navBar.vue";
 import Confirm from "./components/Confirm.vue";
 import ListCell from "@/components/ListCell";
-import { mapState } from "vuex";
-
+import { mapMutations, mapState } from "vuex";
+import { getHousesAll } from "@/apis/house";
 export default {
   name: "goHome",
   data() {
@@ -70,14 +70,26 @@ export default {
       });
     },
     //下拉刷新
-    onLoad() {
-      if(this.searchList.length<=20){
-        this.finished=true
+    async onLoad() {
+      this.setStartEnd(); //让开始项和结束项各自加20
+      try {
+        const { data } = await getHousesAll(this.parameters);
+        console.log(data.body);
+        if (data.body.count === this.searchList.length) {
+          //数据请求总量等于数据库结束下拉请求
+          this.finished = true;
+        }
+        this.searchList.push(...data.body.list);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.loading = false;
       }
     },
+    ...mapMutations(["setStartEnd"]),
   },
   computed: {
-    ...mapState(["searchList"]),
+    ...mapState(["searchList", "parameters"]),
   },
 };
 </script>
