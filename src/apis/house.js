@@ -36,3 +36,14 @@ export const getMap = (id) => {
         url: `/houses/${id}`,
     })
 }
+
+//获取地图最后一级房源
+export const getMapEnd = (id) => {
+    return request({
+        method: 'GET',
+        url: `/houses`,
+        params: {
+            cityId: id
+        }
+    })
+}

@@ -32,8 +32,8 @@ export const hotCity = () => {
     })
 }
 
-//获取地图坐标/area/map
-export const getMap = (id) => {
+//获取地图坐标/area/map coordinate
+export const getMapCoordinate = (id) => {
     return request({
         method: 'GET',
         url: '/area/map',
@@ -42,3 +42,5 @@ export const getMap = (id) => {
         }
     })
 }
+
+//获取
