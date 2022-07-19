@@ -109,16 +109,32 @@ export default {
     },
     //获取城市地图坐标
     async getMapCoordinate() {
+      this.$toast.loading({
+        duration: 0, // 持续展示 toast
+        forbidClick: true,
+        message: "加载中",
+      });
       try {
         const { data } = await getMapCoordinate(this.currentCityL.value);
         this.label = data.body;
+        this.$toast.loading({
+          duration: 1, // 持续展示 toast
+          forbidClick: true,
+          message: "加载中",
+        });
       } catch (error) {
-        console.log(error);
+        this.$toast.fail({
+          message: "加载失败,请稍后重试",
+        });
       }
     },
     //点击获取下一级城市
     async nextLabel(label) {
-      console.log(label);
+      this.$toast.loading({
+        duration: 0, // 持续展示 toast
+        forbidClick: true,
+        message: "加载中",
+      });
       try {
         const { data } = await getMapCoordinate(label.value);
         this.label = data.body;
@@ -126,19 +142,37 @@ export default {
         this.center.lng = this.label[0].coord.longitude;
         this.center.lat = this.label[0].coord.latitude;
         this.zoom += 2;
-        console.log(this.label);
+        this.$toast.loading({
+          duration: 1, // 持续展示 toast
+          forbidClick: true,
+          message: "加载中",
+        });
       } catch (error) {
-        console.log(error);
+        this.$toast.fail({
+          message: "加载失败,请稍后重试",
+        });
       }
     },
     //点击最后一级时触发
     async nextLabelEnd(label) {
+      this.$toast.loading({
+        duration: 0, // 持续展示 toast
+        forbidClick: true,
+        message: "加载中",
+      });
       try {
         const { data } = await getMapEnd(label.value);
         this.endLsit = data.body.list;
         this.show = true;
+        this.$toast.loading({
+          duration: 1, // 持续展示 toast
+          forbidClick: true,
+          message: "加载中",
+        });
       } catch (error) {
-        console.log(error);
+        this.$toast.fail({
+          message: "加载失败,请稍后重试",
+        });
       }
     },
     //点击更多跳转找房页面
