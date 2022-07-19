@@ -48,7 +48,25 @@
     </div>
     <!-- 描述部分 -->
     <!-- 地图区域 -->
-    <div class="map">这是一张大地图</div>
+    <div class="map-top">小区:{{ data.community }}</div>
+    <div class="map-bottom">
+      <baidu-map class="map" :center="center" :zoom="15">
+        <bm-label
+          :content="data.community"
+          :position="conterChildren"
+          :labelStyle="style"
+          v-if="conterChildren"
+        >
+        </bm-label>
+        <bm-label
+          :content="''"
+          :position="conterChildren"
+          :labelStyle="style1"
+          v-if="conterChildren"
+        >
+        </bm-label>
+      </baidu-map>
+    </div>
     <!-- 地图区域 -->
     <!-- 房屋配套 -->
     <div class="about">
@@ -126,6 +144,9 @@ import ListCell from "@/components/ListCell.vue";
 export default {
   data() {
     return {
+      center: { lng: 116.404, lat: 39.915 },
+      conterChildren: "",
+      zoom: 11,
       data: {},
       //房屋配置
       furniture: [
@@ -207,6 +228,21 @@ export default {
           houseCode: "48691d67-9512-f54c",
         },
       ],
+      style: {
+        display: "inline",
+        backgroundColor: "#ee5d5b",
+        padding: "5px 10px",
+        color: "#fff",
+      },
+      style1: {
+        width: "0px",
+        height: "0px",
+        border: "5px solid",
+        borderColor: "#ee5d5b transparent transparent #ee5d5b ",
+        marginTop: "28px",
+        marginLeft: "20px",
+        backgroundColor: "transparent",
+      },
     };
   },
   created() {
@@ -222,6 +258,19 @@ export default {
         const data = await getMap(id);
         this.data = data.data.body; //获取返回来的数据
         console.log(this.data);
+        //如果该房源有位置则修改位置,没有取默认值
+        if (this.data.coord.latitude) {
+          this.center.lng = this.data.coord.longitude;
+          this.center.lat = this.data.coord.latitude;
+          //修改标签位置
+          const obj = {
+            lng: this.data.coord.longitude,
+            lat: this.data.coord.latitude,
+          };
+          this.conterChildren = obj;
+        } else {
+          console.log(this.data);
+        }
       } catch (err) {
         console.log(err);
       }
@@ -283,6 +332,24 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.map-bottom[data-v-3316eea4] {
+  margin-top: 0;
+}
+.map {
+  width: 100%;
+  height: 100%;
+}
+.map-top {
+  height: 44px;
+  background-color: #fff;
+  line-height: 44px;
+  font-size: 14px;
+  padding-left: 15px;
+  margin-top: 10px;
+}
+.about[data-v-3316eea4] {
+  padding: 0;
+}
 .summary {
   .top {
     display: flex;
@@ -438,9 +505,9 @@ footer {
   }
 }
 // 地图区域
-.map {
+.map-bottom {
   width: 100%;
-  height: 190px;
+  height: 145px;
   line-height: 190px;
   text-align: center;
   background-color: #fff;
@@ -471,5 +538,4 @@ footer {
 .bg {
   height: 10px;
 }
-
 </style>

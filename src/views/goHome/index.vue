@@ -44,7 +44,7 @@ import ListCell from "@/components/ListCell";
 import { mapMutations, mapState } from "vuex";
 import { getHousesAll } from "@/apis/house";
 export default {
-  name: "goHome",
+  name: "List",
   data() {
     return {
       loading: false,

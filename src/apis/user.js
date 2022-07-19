@@ -60,7 +60,7 @@ export const addHouses = (data) => {
     return request({
         method: 'POST',
         url: '/user/houses',
-        body: data
+        data
     })
 }
 

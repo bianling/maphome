@@ -8,19 +8,19 @@
         <van-cell
           title="小区名称"
           is-link
-          :value="community.communityName || '请输入小区名称' "
+          :value="community.communityName || '请输入小区名称'"
           to="/rent/search"
         />
         <!-- 小区名称 -->
         <!-- 租金 -->
-        <van-field v-model="data.price" placeholder="请输入租金/月">
+        <van-field v-model.number="data.price" placeholder="请输入租金/月">
           <span slot="label">租&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;金</span>
           <span slot="extra">￥/月</span>
         </van-field>
         <!-- 租金 -->
         <!-- 建筑面积 -->
         <van-field
-          v-model="data.size"
+          v-model.number="data.size"
           label="建筑面积"
           placeholder="请输入建筑面积"
         >
@@ -28,11 +28,7 @@
         </van-field>
         <!-- 建筑面积 -->
         <!-- 户型 -->
-        <van-cell
-          is-link
-          :value="actionsText || '请选择'"
-          @click="show = true"
-        >
+        <van-cell is-link :value="actionsText || '请选择'" @click="show = true">
           <span slot="title">户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;型</span>
         </van-cell>
         <!-- 弹出层 -->
@@ -88,7 +84,12 @@
       <div class="information">房屋图像</div>
       <!-- fileList用于绑定图片个数,固定写法 -->
       <!-- 图片上传 -->
-      <van-uploader v-model="imgs" multiple :after-read="afterRead"/>
+      <van-uploader
+        v-model="imgs"
+        multiple
+        :after-read="afterRead"
+        @delete="delImg"
+      />
       <!-- 图片上传 -->
       <div class="information">房屋配置</div>
       <!-- 房屋配置列表 -->
@@ -133,9 +134,9 @@
 <script>
 import navBar from "@/components/navBar.vue";
 import { addHouses } from "@/apis/user";
-import { mapState } from "vuex";
+import { mapMutations, mapState } from "vuex";
 import { getHouses } from "@/apis/house";
-import {plugin} from "@/apis/plugin"
+import { plugin } from "@/apis/plugin";
 export default {
   name: "Add",
   data() {
@@ -144,7 +145,7 @@ export default {
       data: {
         title: "", //房屋标题
         description: "", //房屋描述
-        houseImg: '', //图片
+        houseImg: "", //图片
         oriented: "", //朝向
         supporting: [], //配置
         price: "", //租金
@@ -227,8 +228,9 @@ export default {
       actionsOriented: [],
       floorText: "", //楼层文本内容
       orientedText: "", //朝向文本内容
-      actionsText:"",//户型文本内容
-      imgs:[]
+      actionsText: "", //户型文本内容
+      imgs: [],
+      image: [], //临时存储图片数组,用于转化为|分割的上传所需内容
     };
   },
   components: {
@@ -238,14 +240,40 @@ export default {
     //发布房源
     async addRent() {
       try {
-        this.data.supporting=this.data.supporting.join('|')
-        const res = await addHouses(this.data);
-        console.log(res);
+        if (
+          this.data.houseImg &&
+          this.community &&
+          this.data.size &&
+          this.data.price
+        ) {
+          //将家具进行修改
+          if (this.data.supporting.length >= 2) {
+            this.data.supporting = this.data.supporting.join("|");
+          }
+          await addHouses(this.data);
+          //发布完成,将所有数据清空
+          this.setCommunity("");
+          this.$dialog
+            .confirm({
+              title: "提示",
+              message: "发布房源成功",
+              confirmButtonText: "继续发布",
+              confirmButtonColor: "#108ee9",
+              cancelButtonText: "去查看",
+            })
+            .then(() => {
+              history.go(0);
+            })
+            .catch(() => {
+              this.$router.push("/HomePage/goHome");
+            });
+        } else {
+          this.$toast.fail("请补全数据");
+        }
       } catch (err) {
-        console.log(err);
+        this.$toast.fail("发布失败,请重试");
       }
     },
-    afterRead() {},
     // 退出添加
     noAdd() {
       this.$dialog
@@ -286,16 +314,29 @@ export default {
           (dataName[index]["value"] = item.value);
       });
     },
-    async afterRead(file){
-      console.log(file);
+    //上传图片执行
+    async afterRead(file) {
+      const fromData = new FormData();
+      fromData.append("file", file.file);
       try {
-       const res=  await  plugin(file)
-       console.log(res);
+        const image = (await plugin(fromData)).data.body;
+        console.log(image);
+        this.image.push(...image);
+        this.data.houseImg = this.image.join("|");
       } catch (error) {
         console.log(error);
       }
-
-    }
+    },
+    //删除图片执行
+    delImg(file, index) {
+      this.image.splice(index.index, 1);
+      if (this.image.length !== 0) {
+        this.data.houseImg = this.image.join("|");
+      } else if (this.image.length === 0) {
+        this.data.houseImg = "";
+      }
+    },
+    ...mapMutations(["setCommunity"]),
   },
   watch: {
     furniture: {
@@ -308,23 +349,8 @@ export default {
             this.data.supporting.push(item.furnitureList);
           }
         });
-        console.log(this.data.supporting);
       },
     },
-    //监听图片列表修改,将图base64加入到数据中
-    imgs:{
-      deep:true,
-      handler(){
-        this.data.houseImg=''
-        this.imgs.forEach(item=>{
-          if(!this.data.houseImg){
-            this.data.houseImg=item.content
-          }else{
-            this.data.houseImg= this.data.houseImg + '|' +item.content
-          }
-        })
-      }
-    }
   },
   computed: {
     ...mapState(["community"]),
@@ -333,11 +359,11 @@ export default {
     try {
       const { data } = await getHouses();
       // 楼层遍历
-      this.foreachData(data.body.floor,this.floor)
+      this.foreachData(data.body.floor, this.floor);
       //遍历朝向
-      this.foreachData(data.body.oriented,this.actionsOriented)
+      this.foreachData(data.body.oriented, this.actionsOriented);
       //遍历户型
-      this.foreachData(data.body.roomType,this.actions)
+      this.foreachData(data.body.roomType, this.actions);
     } catch (error) {
       this.$toast.fail("加载失败");
     }

@@ -89,7 +89,7 @@ export default {
         backgroundColor: "#24ba72",
         border: "none",
         borderRadius: "3px",
-        padding: "0px",
+        padding: "4px",
       },
       label: [],
       number: 1,

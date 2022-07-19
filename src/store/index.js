@@ -15,7 +15,7 @@ export default new Vuex.Store({
       value: "AREA|88cff55c-aaa4-e2e0"
     },
     //search搜索点击结果
-    community: {},
+    community: '',
     //根据条件查询房屋的条件存储
     parameters: {
       id: '',//地区id
