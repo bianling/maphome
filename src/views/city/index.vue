@@ -59,7 +59,6 @@ export default {
         duration: 0,
       });
       const res = await hotCity();
-      this.hotCity = res.data.body;
       //城市列表分类
       const { data } = await getCity();
       let obj = {};
@@ -78,6 +77,7 @@ export default {
       newkey.forEach((item) => {
         this.cityList.push(obj[item]);
         this.indexList.push(item);
+        this.hotCity = res.data.body;
       });
       // 加载完毕 关闭加载提示
       this.$toast.loading({

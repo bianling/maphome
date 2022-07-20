@@ -29,15 +29,26 @@
         </div>
         <!-- 点击两次之后渲染成横条 -->
         <div v-else>
-          <bm-label
-            :content="`<span>${item.label} ${item.count}套</span>`"
-            :position="{ lng: item.coord.longitude, lat: item.coord.latitude }"
-            :labelStyle="style1"
-            v-for="item in label"
-            :key="item.value"
-            @click="nextLabelEnd(item)"
-          >
-          </bm-label>
+          <div v-for="item in label" :key="item.value">
+            <bm-label
+              :content="`<span>${item.label} ${item.count}套</span>`"
+              :position="{
+                lng: item.coord.longitude,
+                lat: item.coord.latitude,
+              }"
+              :labelStyle="style1"
+              @click="nextLabelEnd(item)"
+            >
+            </bm-label>
+            <bm-label
+              :content="''"
+              :position="{
+                lng: item.coord.longitude,
+                lat: item.coord.latitude,
+              }"
+              :labelStyle="style2"
+            ></bm-label>
+          </div>
         </div>
       </bm-overlay>
       <!-- 自定义遮盖物 -->
@@ -90,6 +101,15 @@ export default {
         border: "none",
         borderRadius: "3px",
         padding: "4px",
+      },
+      style2: {
+        width: "0",
+        height: "0",
+        border: "5px solid",
+        borderColor: "#24ba72 transparent transparent #24ba72",
+        marginTop: "20px",
+        marginLeft: "20px",
+        backgroundColor: "transparent",
       },
       label: [],
       number: 1,
@@ -161,7 +181,7 @@ export default {
         message: "加载中",
       });
       try {
-        const { data } = await getMapEnd(label.value);
+        const { data } = await  (label.value);
         this.endLsit = data.body.list;
         this.show = true;
         this.$toast.loading({

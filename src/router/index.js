@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import store from '@/store/index'
+import { Toast } from 'vant';
+
+Vue.use(Toast);
 
 const originalPush = VueRouter.prototype.push
 VueRouter.prototype.push = function push(location) {
@@ -80,7 +83,7 @@ const routes = [
           if (store.state.token) {
             next()
           } else {
-            return next('/login')
+            Toast.fail('暂无权限,请先登录')
           }
         },
       },
@@ -99,7 +102,14 @@ const routes = [
   // 具体商品内容
   {
     path: '/detail',
-    component: () => import('@/views/detail')
+    component: () => import('@/views/detail'),
+    beforeEnter: (to, from, next) => {
+      if (to.query.id) {
+        next()
+      }else{
+        Toast.fail('哥么哥么,这里直接可不兴直接跳转啊~~~')
+      }
+    }
   },
   {
     path: '/map',
