@@ -181,7 +181,7 @@ export default {
         message: "加载中",
       });
       try {
-        const { data } = await  (label.value);
+        const { data } = await getMapEnd(label.value);
         this.endLsit = data.body.list;
         this.show = true;
         this.$toast.loading({
@@ -190,6 +190,7 @@ export default {
           message: "加载中",
         });
       } catch (error) {
+        console.log(error);
         this.$toast.fail({
           message: "加载失败,请稍后重试",
         });
